@@ -1,0 +1,18 @@
+#!/usr/bin/python
+
+"""
+Front end for the docutils Texinfo writer
+"""
+
+try:
+    import locale
+    locale.setlocale(locale.LC_ALL, '')
+except:
+    pass
+
+from docutils.core import publish_cmdline, default_description
+
+description = ('Generates Texinfo documents from standalone reStructuredText '
+               'sources.  ' + default_description)
+
+publish_cmdline(writer_name='texinfo', description=description)

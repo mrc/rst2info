@@ -12,7 +12,7 @@ class InfoTranslator(nodes.NodeVisitor):
         self.docinfo = {}
 
     def astext(self):
-        return ''.join(self.header + self.body)
+        return '\n'.join(self.header + self.body + [''])
     
     def visit_document(self, node):
         self.header.append(self.document_start)
@@ -38,16 +38,23 @@ class InfoTranslator(nodes.NodeVisitor):
         self.body.append(node.astext())
         raise nodes.SkipNode
 
-'''
     def visit_bullet_list(self, node):
-        pass
+        self.body.append('@itemize @bullet')
 
     def depart_bullet_list(self, node):
-        pass
+        self.body.append('@end @itemize')
 
     def visit_list_item(self, node):
-        pass
+        self.body.append('@item')
 
     def depart_list_item(self, node):
+        self.body.append('')
+
+    def visit_literal(self, node):
+        raise nodes.SkipNode
+
+    def visit_literal_block(self, node):
+        self.body.append(node.astext())
+
+    def depart_literal_block(self, node):
         pass
-'''
