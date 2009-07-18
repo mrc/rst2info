@@ -1,3 +1,3 @@
 __docformat__ = 'reStructuredText'
 
-from InfoWriter import InfoWriter as Writer
+from info_writer import InfoWriter as Writer

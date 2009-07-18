@@ -1,5 +1,5 @@
 import rst_test_utils
-from InfoWriter import InfoWriter
+from info_writer import InfoWriter
 
 class T(rst_test_utils.TestCase):
 

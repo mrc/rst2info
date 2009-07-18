@@ -1,6 +1,6 @@
 import unittest
 from docutils import utils
-from InfoTranslator import InfoTranslator
+from info_translator import InfoTranslator
 
 def basic_test_document(text=''):
     from docutils.parsers import rst

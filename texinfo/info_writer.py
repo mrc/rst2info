@@ -1,12 +1,12 @@
 from docutils import writers
-import InfoTranslator
+import info_translator
 
 class InfoWriter(writers.Writer):
     supported = ('info')
 
     def __init__(self):
         writers.Writer.__init__(self)
-        self.translator_class = InfoTranslator.InfoTranslator
+        self.translator_class = info_translator.InfoTranslator
 
     def translate(self):
         self.visitor = visitor = self.translator_class(self.document)
