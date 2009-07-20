@@ -1,0 +1,47 @@
+===========
+Source code
+===========
+http://repo.or.cz/w/rst2info.git
+
+=============
+Prerequisites
+=============
+sudo apt-get install python-nose python-docutils
+
+=========
+Run tests
+=========
+$ nosetests
+
+==========================
+Self-indulgent description
+==========================
+You are dusting cobwebs off rst2info, a project that began in July
+2009 with the good intentions of eventually being able to convert
+Python documentation into Texinfo format, so the Author could browse
+the blasted thing into Emacs as the gods intended.
+
+See, Python 2.6 (and 3.0) switched documentation formats to
+yet-another-light-markup-language which could only produce HTML and
+PDF files out of the box, meaning the info files we were used to from
+2.5 and earlier disappeared. Fortunately, the same powers that be that
+decided to invent yet-another-light-markup-language went some way
+towards clawing their way out of the pit by developing a decent enough
+parsing and processing toolkit for the thing.
+
+On the upside, there was a good looking framework to start building
+upon. On the downside, the Author had no real knowledge of either
+reStructuredText or Texinfo format, and I suspect not enough
+enthusiasm to learn either in depth suitable for the task, so the
+whole thing was doomed from the first commit.
+
+So while you've been reading this, and wondering what is is about the
+internet that leads you to spend your time on that sort of thing, the
+Author has probably long since lost interest and is reading something
+else on the internet, and wondering what it is that leads him to spend
+his time on that sort of thing.
+
+In the mean time, I suggest you clone the repo, run nosetests, and see
+just what got done before the Apathycalypse. If it serves as any sort
+of a useful codebase for you, good luck with it.
+
