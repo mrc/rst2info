@@ -6,6 +6,7 @@ class InfoTranslator(nodes.NodeVisitor):
     
     def __init__(self, document):
         nodes.NodeVisitor.__init__(self, document)
+        self.settings = document.settings
         self.header = []
         self.body = []
         self.section_level = 0
@@ -13,7 +14,7 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def astext(self):
         return '\n'.join(self.header + self.body + [''])
-    
+
     def visit_document(self, node):
         self.header.append(self.document_start)
     
@@ -55,6 +56,5 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def visit_literal_block(self, node):
         self.body.append(node.astext())
+        raise nodes.SkipNode
 
-    def depart_literal_block(self, node):
-        pass

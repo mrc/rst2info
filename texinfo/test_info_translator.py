@@ -74,7 +74,18 @@ I don't think that I can take it.
                           "",
                           "@end @itemize"], self.visitor.body)
 
-    def notest_literal_block(self):
+    def notest_indented_block(self):
+        self.given_input("""
+left aligned.
+
+  indented with two spaces
+
+    indented with four spaces
+
+""")
+        self.assertEqual("foo", self.visitor.body)
+
+    def test_literal_block(self):
         self.given_input("""
 THE LANDING::
 
@@ -82,11 +93,11 @@ THE LANDING::
           As he landed his crew with care;
      Supporting each man on the top of the tide
           By a finger entwined in his hair.
+
 """)
         self.assertEqual(["THE LANDING:",
 """"Just the place for a Snark!" the Bellman cried,
-          As he landed his crew with care;
-     Supporting each man on the top of the tide
-          By a finger entwined in his hair.
-"""                          
+     As he landed his crew with care;
+Supporting each man on the top of the tide
+     By a finger entwined in his hair."""
                           ], self.visitor.body)
