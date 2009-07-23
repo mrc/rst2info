@@ -11,16 +11,94 @@ class T(rst_test_utils.TestCase):
     def setUp(self):
         self.given_input('')
 
-    def test_adds_info_header(self):
+    def notest_adds_info_header(self):
         self.assertTrue(self.visitor.astext().startswith('\\input texinfo'))
 
-    def test_doc_has_title(self):
+    def test_title(self):
         self.given_input('''
-****************
 Hello, world!
-****************
+================
 ''')
-        self.assertEqual(['@node Hello, world!'], self.visitor.body)
+        self.assertEqual(['@node Top', '@top Hello, world!'], self.visitor.body)
+
+    def test_chapter(self):
+        self.given_input('''
+======
+Title!
+======
+
+Chapter 1
+=========
+''')
+        self.assertEqual(['@node Top', '@top Title!', '@chapter Chapter 1'],
+                         self.visitor.body)
+
+    def test_section(self):
+        self.given_input('''
+======
+Title!
+======
+
+Chapter 1
+=========
+
+Section 1
+---------
+''')
+        self.assertEqual(['@node Top', '@top Title!',
+                          '@chapter Chapter 1',
+                          '@section Section 1'],
+                         self.visitor.body)
+
+    def test_subsection(self):
+        self.given_input('''
+======
+Title!
+======
+
+Chapter 1
+=========
+
+Section 1
+---------
+
+Subsection 1
+~~~~~~~~~~~~
+''')
+        self.assertEqual(['@node Top', '@top Title!',
+                          '@chapter Chapter 1',
+                          '@section Section 1',
+                          '@subsection Subsection 1'],
+                         self.visitor.body)
+
+    def test_section_layering(self):
+        self.given_input("""
+===================
+A Plan for the Moon
+===================
+
+The Problem
+===========
+
+Cheese
+------
+
+Lunar mold
+~~~~~~~~~~
+
+Cows
+----
+
+A Modest Solution
+=================
+""")
+        self.assertEqual(['@node Top', '@top A Plan for the Moon',
+                          '@chapter The Problem',
+                          '@section Cheese',
+                          '@subsection Lunar mold',
+                          '@section Cows',
+                          '@chapter A Modest Solution'],
+                         self.visitor.body)
 
     def test_comments_are_comments(self):
         self.given_input("""

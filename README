@@ -1,19 +1,19 @@
-===========
+================================================================
+rst2info - Convert reStructuredText to TexInfo
+================================================================
+
 Source code
 ===========
 http://repo.or.cz/w/rst2info.git
 
-=============
 Prerequisites
 =============
 sudo apt-get install python-nose python-docutils
 
-=========
 Run tests
 =========
 $ nosetests
 
-==========================
 Self-indulgent description
 ==========================
 You are dusting cobwebs off rst2info, a project that began in July

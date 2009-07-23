@@ -16,8 +16,11 @@ class T(rst_test_utils.TestCase):
     def test_translate(self):
         self.given_input("""
 ********************************
-CHAPTER I. Down the Rabbit-Hole
+Alice In Wonderland
 ********************************
+
+CHAPTER I. Down the Rabbit-Hole
+===============================
 
 Alice was beginning to get very tired of sitting by her sister on the
 bank, and of having nothing to do: once or twice she had peeped into the
@@ -28,7 +31,10 @@ conversation?'
         self.writer.translate()
         self.assertEqual(self.writer.output,
 """\\input texinfo  @c -*-texinfo-*-
-@node CHAPTER I. Down the Rabbit-Hole
+
+@node Top
+@top Alice In Wonderland
+@chapter CHAPTER I. Down the Rabbit-Hole
 Alice was beginning to get very tired of sitting by her sister on the
 bank, and of having nothing to do: once or twice she had peeped into the
 book her sister was reading, but it had no pictures or conversations in

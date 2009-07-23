@@ -2,7 +2,8 @@ from docutils import nodes
 
 class InfoTranslator(nodes.NodeVisitor):
 
-    document_start = '\\input texinfo  @c -*-texinfo-*-'
+    document_start = """\\input texinfo  @c -*-texinfo-*-
+"""
     
     def __init__(self, document):
         nodes.NodeVisitor.__init__(self, document)
@@ -31,8 +32,32 @@ class InfoTranslator(nodes.NodeVisitor):
     def depart_section(self, node):
         self.section_level -= 1
 
+    def emit_title(self, text):
+        #self.body.append('section %d' % self.section_level)
+        #self.body.append('@section %s' % node.astext())
+        if self.section_level==1:
+            self.body.append('@node Top')
+            self.body.append('@top %s' % text)
+        else:
+            self.body.append('@chapter %s' % text)
+
+    def emit_chapter(self, text):
+        self.body.append('@chapter %s' % text)
+
+    def emit_section(self, text):
+        self.body.append('@section %s' % text)
+
+    def emit_subsection(self, text):
+        self.body.append('@subsection %s' % text)
+
     def visit_title(self, node):
-        self.body.append('@node %s' % node.astext())
+        title_functions = [self.emit_title, self.emit_chapter, self.emit_section, self.emit_subsection]
+        try:
+            f = title_functions[self.section_level-1]
+            f(node.astext())
+        except:
+            pass
+        #self.emit_title(node.astext())
         raise nodes.SkipNode
 
     def visit_paragraph(self, node):
