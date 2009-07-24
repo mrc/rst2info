@@ -33,13 +33,8 @@ class InfoTranslator(nodes.NodeVisitor):
         self.section_level -= 1
 
     def emit_title(self, text):
-        #self.body.append('section %d' % self.section_level)
-        #self.body.append('@section %s' % node.astext())
-        if self.section_level==1:
-            self.body.append('@node Top')
-            self.body.append('@top %s' % text)
-        else:
-            self.body.append('@chapter %s' % text)
+        self.body.append('@node Top')
+        self.body.append('@top %s' % text)
 
     def emit_chapter(self, text):
         self.body.append('@chapter %s' % text)
@@ -52,12 +47,12 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def visit_title(self, node):
         title_functions = [self.emit_title, self.emit_chapter, self.emit_section, self.emit_subsection]
+        print '>>>visit_title(%d:%s)'%(self.section_level,node.astext())
         try:
             f = title_functions[self.section_level-1]
             f(node.astext())
         except:
             pass
-        #self.emit_title(node.astext())
         raise nodes.SkipNode
 
     def visit_paragraph(self, node):
@@ -83,3 +78,9 @@ class InfoTranslator(nodes.NodeVisitor):
         self.body.append(node.astext())
         raise nodes.SkipNode
 
+    def visit_block_quote(self, node):
+        self.body.append('@quotation')
+        #self.body.append(node.astext())
+
+    def depart_block_quote(self, node):
+        self.body.append('@end quotation')

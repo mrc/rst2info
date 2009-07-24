@@ -11,7 +11,7 @@ class T(rst_test_utils.TestCase):
     def setUp(self):
         self.given_input('')
 
-    def notest_adds_info_header(self):
+    def test_adds_info_header(self):
         self.assertTrue(self.visitor.astext().startswith('\\input texinfo'))
 
     def test_title(self):
@@ -152,16 +152,32 @@ I don't think that I can take it.
                           "",
                           "@end @itemize"], self.visitor.body)
 
-    def notest_indented_block(self):
+    def test_quotation(self):
         self.given_input("""
-left aligned.
-
-  indented with two spaces
-
-    indented with four spaces
+  Never precede any action with the words "Watch this!"
+  -- the first commandment of frisbeetarianism
 
 """)
-        self.assertEqual("foo", self.visitor.body)
+        self.assertEqual(["@quotation",
+'''Never precede any action with the words "Watch this!"
+-- the first commandment of frisbeetarianism''',
+                          "@end quotation"], self.visitor.body)
+
+    def test_formatted_code(self):
+        self.given_input("""
+Frisbeetarianism is the belief that, when you die, your soul goes up
+onto the roof and gets stuck.
+
+  Never precede any action with the words "Watch this!"
+  -- the first constant Law of Frisbee
+""")
+        self.assertEqual([
+'''Frisbeetarianism is the belief that, when you die, your soul goes up
+onto the roof and gets stuck.''',
+"@quotation",
+'''Never precede any action with the words "Watch this!"
+-- the first constant Law of Frisbee''',
+                          "@end quotation"], self.visitor.body)
 
     def test_literal_block(self):
         self.given_input("""
