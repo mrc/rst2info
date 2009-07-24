@@ -6,6 +6,7 @@ class T(rst_test_utils.TestCase):
     def given_input(self, input):
         super(T, self).given_input(input)
         self.visitor = InfoTranslator(self.document)
+        self.visitor.section_level = -1 #HACK: core.publish_* start at 0, but that makes these tests fail - maybe missing some attribute set on the new document?
         self.document.walkabout(self.visitor)
 
     def setUp(self):

@@ -47,9 +47,8 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def visit_title(self, node):
         title_functions = [self.emit_title, self.emit_chapter, self.emit_section, self.emit_subsection]
-        print '>>>visit_title(%d:%s)'%(self.section_level,node.astext())
         try:
-            f = title_functions[self.section_level-1]
+            f = title_functions[self.section_level]
             f(node.astext())
         except:
             pass

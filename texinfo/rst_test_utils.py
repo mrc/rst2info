@@ -6,21 +6,14 @@ def basic_test_document(text=''):
     from docutils.parsers import rst
     from docutils import frontend
 
-    overrides = {'initial_header_level': 1}
-    option_parser = frontend.OptionParser(components=(rst.Parser,), defaults=overrides)
+    option_parser = frontend.OptionParser(components=(rst.Parser,),)
     settings = option_parser.get_default_values()
-
-
-
     document = utils.new_document('rst_test_utils', settings)
-
-    print "translate:%s" % document.asdom().childNodes[0].toprettyxml('    ','\n')
 
     parser = rst.Parser()
     parser.parse(text, document)
 
-    print "translate:%s" % document.asdom().childNodes[0].toprettyxml('    ','\n')
-
+    #print 'document:\n%s' % document.asdom().childNodes[0].toprettyxml('    ','\n')
     return document
 
 class TestCase(unittest.TestCase):

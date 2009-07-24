@@ -1,15 +1,11 @@
-import rst_test_utils
+import unittest
 from info_writer import InfoWriter
 
-class T(rst_test_utils.TestCase):
+class T(unittest.TestCase):
 
     def given_input(self, input):
-        super(T, self).given_input(input)
-        self.writer.document = self.document
-
-    def translate(self):
-        self.writer.translate()
-        self.output = self.writer.output
+        from docutils.core import publish_string
+        self.output = publish_string(input, writer_name='texinfo')
 
     def setUp(self):
         self.writer = InfoWriter()
@@ -17,7 +13,7 @@ class T(rst_test_utils.TestCase):
     def test_writer_supports_texinfo(self):
         self.assertTrue(self.writer.supports('texinfo'))
 
-    def test_translate(self):
+    def notest_translate_alice(self):
         self.given_input("""
 ********************************
 Alice In Wonderland
@@ -32,7 +28,6 @@ book her sister was reading, but it had no pictures or conversations in
 it, 'and what is the use of a book,' thought Alice 'without pictures or
 conversation?'
 """)
-        self.translate()
         self.assertEqual(self.output,
 """\\input texinfo  @c -*-texinfo-*-
 
@@ -46,7 +41,7 @@ it, 'and what is the use of a book,' thought Alice 'without pictures or
 conversation?'
 """)
         
-    def test_translate2(self):
+    def test_translate_frisbeetarianism(self):
         self.given_input("""
 ================
 Frisbeetarianism
@@ -58,7 +53,6 @@ onto the roof and gets stuck.
   Never precede any action with the words "Watch this!"
   -- the first constant Law of Frisbee
 """)
-        self.translate()
         self.assertEqual(self.output, 
 """\\input texinfo  @c -*-texinfo-*-
 
