@@ -1,4 +1,5 @@
 from docutils import nodes
+import exceptions
 
 class InfoTranslator(nodes.NodeVisitor):
 
@@ -28,9 +29,11 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def visit_section(self, node):
         self.section_level += 1
+        #self.body.append('@c +s %d' % self.section_level)
 
     def depart_section(self, node):
         self.section_level -= 1
+        #self.body.append('@c -s %d' % self.section_level)
 
     def emit_title(self, text):
         self.body.append('@node Top')
@@ -49,9 +52,10 @@ class InfoTranslator(nodes.NodeVisitor):
         title_functions = [self.emit_title, self.emit_chapter, self.emit_section, self.emit_subsection]
         try:
             f = title_functions[self.section_level]
-            f(node.astext())
-        except:
-            pass
+        except exceptions.IndexError:
+            f = self.emit_subsection
+            #self.body.append('@c section_level %d' % self.section_level)
+        f(node.astext())
         raise nodes.SkipNode
 
     def visit_paragraph(self, node):

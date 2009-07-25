@@ -101,6 +101,40 @@ A Modest Solution
                           '@chapter A Modest Solution'],
                          self.visitor.body)
 
+    def test_beyond_subsections(self):
+        self.given_input('''
+======
+Title!
+======
+
+Chapter 1
+=========
+
+Section 1
+---------
+
+Subsection 1
+~~~~~~~~~~~~
+
+Something else
+^^^^^^^^^^^^^^
+
+Subsection 2
+~~~~~~~~~~~~
+
+Section 2
+---------
+
+''')
+        self.assertEqual(['@node Top', '@top Title!',
+                          '@chapter Chapter 1',
+                          '@section Section 1',
+                          '@subsection Subsection 1',
+                          '@subsection Something else',
+                          '@subsection Subsection 2',
+                          '@section Section 2'],
+                         self.visitor.body)
+
     def test_comments_are_comments(self):
         self.given_input("""
 .. hello-world:
