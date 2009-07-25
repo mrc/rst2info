@@ -1,16 +1,20 @@
 import unittest
-from docutils import utils
+from docutils import utils, frontend, core, readers
+from docutils.parsers import rst
 from info_translator import InfoTranslator
 
 def basic_test_document(text=''):
-    from docutils.parsers import rst
-    from docutils import frontend
+    reader_name = 'standalone'
+    parser_name = 'restructuredtext'
 
-    option_parser = frontend.OptionParser(components=(rst.Parser,),)
-    settings = option_parser.get_default_values()
+    reader_class = readers.get_reader_class(reader_name)
+    reader = reader_class(None, parser_name)
+    parser = reader.parser
+
+    options = frontend.OptionParser(components=(parser,reader))
+    settings = options.get_default_values()
     document = utils.new_document('rst_test_utils', settings)
 
-    parser = rst.Parser()
     parser.parse(text, document)
 
     #print 'document:\n%s' % document.asdom().childNodes[0].toprettyxml('    ','\n')

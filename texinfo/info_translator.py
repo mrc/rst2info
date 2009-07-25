@@ -83,7 +83,6 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def visit_block_quote(self, node):
         self.body.append('@quotation')
-        #self.body.append(node.astext())
 
     def depart_block_quote(self, node):
         self.body.append('@end quotation')
