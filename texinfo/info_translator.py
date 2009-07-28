@@ -58,6 +58,10 @@ class InfoTranslator(nodes.NodeVisitor):
         f(node.astext())
         raise nodes.SkipNode
 
+    def visit_subtitle(self, node):
+        self.body.append('@majorheading %s' % node.astext())
+        raise nodes.SkipNode
+
     def visit_paragraph(self, node):
         self.body.append(node.astext())
         raise nodes.SkipNode

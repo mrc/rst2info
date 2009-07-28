@@ -1,12 +1,17 @@
 import rst_test_utils
 from info_translator import InfoTranslator
+from docutils.transforms import frontmatter
 
 class T(rst_test_utils.TestCase):
 
-    def given_input(self, input):
+    def given_input(self, input, transforms = []):
         super(T, self).given_input(input)
         self.visitor = InfoTranslator(self.document)
-        self.visitor.section_level = -1 #HACK: core.publish_* start at 0, but that makes these tests fail - maybe missing some attribute set on the new document?
+
+        for t in transforms:
+            self.document.transformer.add_transform(t)
+        self.document.transformer.apply_transforms()
+
         self.document.walkabout(self.visitor)
 
     def setUp(self):
@@ -19,44 +24,25 @@ class T(rst_test_utils.TestCase):
         self.given_input('''
 Hello, world!
 ================
-''')
+''', transforms = [frontmatter.DocTitle])
         self.assertEqual(['@node Top', '@top Hello, world!'], self.visitor.body)
 
-    def test_chapter(self):
+    def test_subtitle(self):
         self.given_input('''
 ======
 Title!
 ======
 
-Chapter 1
-=========
-''')
-        self.assertEqual(['@node Top', '@top Title!', '@chapter Chapter 1'],
-                         self.visitor.body)
-
-    def test_section(self):
-        self.given_input('''
-======
-Title!
-======
-
-Chapter 1
-=========
-
-Section 1
----------
-''')
+--------
+Subtitle
+--------
+''', transforms = [frontmatter.DocTitle])
         self.assertEqual(['@node Top', '@top Title!',
-                          '@chapter Chapter 1',
-                          '@section Section 1'],
+                          '@majorheading Subtitle'],
                          self.visitor.body)
 
     def test_subsection(self):
         self.given_input('''
-======
-Title!
-======
-
 Chapter 1
 =========
 
@@ -66,18 +52,13 @@ Section 1
 Subsection 1
 ~~~~~~~~~~~~
 ''')
-        self.assertEqual(['@node Top', '@top Title!',
-                          '@chapter Chapter 1',
+        self.assertEqual(['@chapter Chapter 1',
                           '@section Section 1',
                           '@subsection Subsection 1'],
                          self.visitor.body)
 
     def test_section_layering(self):
         self.given_input("""
-===================
-A Plan for the Moon
-===================
-
 The Problem
 ===========
 
@@ -93,8 +74,7 @@ Cows
 A Modest Solution
 =================
 """)
-        self.assertEqual(['@node Top', '@top A Plan for the Moon',
-                          '@chapter The Problem',
+        self.assertEqual(['@chapter The Problem',
                           '@section Cheese',
                           '@subsection Lunar mold',
                           '@section Cows',
@@ -103,10 +83,6 @@ A Modest Solution
 
     def test_beyond_subsections(self):
         self.given_input('''
-======
-Title!
-======
-
 Chapter 1
 =========
 
@@ -126,8 +102,7 @@ Section 2
 ---------
 
 ''')
-        self.assertEqual(['@node Top', '@top Title!',
-                          '@chapter Chapter 1',
+        self.assertEqual(['@chapter Chapter 1',
                           '@section Section 1',
                           '@subsection Subsection 1',
                           '@subsection Something else',

@@ -13,11 +13,15 @@ class T(unittest.TestCase):
     def test_writer_supports_texinfo(self):
         self.assertTrue(self.writer.supports('texinfo'))
 
-    def notest_translate_alice(self):
+    def test_translate_alice(self):
         self.given_input("""
 ********************************
 Alice In Wonderland
 ********************************
+
+================================
+Foo
+================================
 
 CHAPTER I. Down the Rabbit-Hole
 ===============================
@@ -33,6 +37,7 @@ conversation?'
 
 @node Top
 @top Alice In Wonderland
+@majorheading Foo
 @chapter CHAPTER I. Down the Rabbit-Hole
 Alice was beginning to get very tired of sitting by her sister on the
 bank, and of having nothing to do: once or twice she had peeped into the

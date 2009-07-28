@@ -1,14 +1,26 @@
-Chapter 1 Title
-===============
+======
+Title!
+======
 
-Section 1.1 Title
------------------
+------------
+Or, Subtitle
+------------
 
-Subsection 1.1.1 Title
-~~~~~~~~~~~~~~~~~~~~~~
+Chapter 1
+=========
 
-Section 1.2 Title
------------------
+Section 1
+---------
 
-Chapter 2 Title
-===============
+Subsection 1
+~~~~~~~~~~~~
+
+Something else
+^^^^^^^^^^^^^^
+
+Subsection 2
+~~~~~~~~~~~~
+
+Section 2
+---------
+

@@ -8,7 +8,7 @@ def basic_test_document(text=''):
     parser_name = 'restructuredtext'
 
     reader_class = readers.get_reader_class(reader_name)
-    reader = reader_class(None, parser_name)
+    reader = reader_class(parser_name=parser_name)
     parser = reader.parser
 
     options = frontend.OptionParser(components=(parser,reader))
@@ -17,7 +17,7 @@ def basic_test_document(text=''):
 
     parser.parse(text, document)
 
-    #print 'document:\n%s' % document.asdom().childNodes[0].toprettyxml('    ','\n')
+    #print 'parser.parse(), document=\n%s' % document.asdom().childNodes[0].toprettyxml('    ','\n')
     return document
 
 class TestCase(unittest.TestCase):
