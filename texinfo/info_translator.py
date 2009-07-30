@@ -72,6 +72,12 @@ class InfoTranslator(nodes.NodeVisitor):
     def depart_bullet_list(self, node):
         self.body.append('@end @itemize')
 
+    def visit_enumerated_list(self, node):
+        self.body.append('@enumerate')
+
+    def depart_enumerated_list(self, node):
+        self.body.append('@end enumerate')
+
     def visit_list_item(self, node):
         self.body.append('@item')
 

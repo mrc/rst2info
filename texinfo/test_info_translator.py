@@ -139,9 +139,7 @@ I don't think that I can take it.
 * milk
 """)
         self.assertEqual(["@itemize @bullet",
-                          "@item",
-                          "milk",
-                          "",
+                          "@item", "milk", "",
                           "@end @itemize"], self.visitor.body)
 
     def test_three_bullet_list(self):
@@ -151,26 +149,40 @@ I don't think that I can take it.
 * bread
 """)
         self.assertEqual(["@itemize @bullet",
-                          "@item",
-                          "milk",
-                          "",
-                          "@item",
-                          "eggs",
-                          "",
-                          "@item",
-                          "bread",
-                          "",
+                          "@item", "milk", "",
+                          "@item", "eggs", "",
+                          "@item", "bread", "",
                           "@end @itemize"], self.visitor.body)
+
+    def test_single_enumerated_list(self):
+        self.given_input("""
+(1) I was transferred to the moon.
+""")
+        self.assertEqual(["@enumerate",
+                          "@item", "I was transferred to the moon.", "",
+                          "@end enumerate"], self.visitor.body)
+
+    def test_three_item_enumerated_list(self):
+        self.given_input("""
+(1) I was transferred to the moon.
+(2) Worse pay, better hours.
+(3) Worse pay, better fellow workers.
+""")
+        self.assertEqual(["@enumerate",
+                          "@item", "I was transferred to the moon.", "",
+                          "@item", "Worse pay, better hours.", "",
+                          "@item", "Worse pay, better fellow workers.", "",
+                          "@end enumerate"], self.visitor.body)
 
     def test_quotation(self):
         self.given_input("""
   Never precede any action with the words "Watch this!"
-  -- the first commandment of frisbeetarianism
+  -- the second constant Law of Frisbee
 
 """)
         self.assertEqual(["@quotation",
 '''Never precede any action with the words "Watch this!"
--- the first commandment of frisbeetarianism''',
+-- the second constant Law of Frisbee''',
                           "@end quotation"], self.visitor.body)
 
     def test_formatted_code(self):
@@ -179,14 +191,14 @@ Frisbeetarianism is the belief that, when you die, your soul goes up
 onto the roof and gets stuck.
 
   Never precede any action with the words "Watch this!"
-  -- the first constant Law of Frisbee
+  -- the second constant Law of Frisbee
 """)
         self.assertEqual([
 '''Frisbeetarianism is the belief that, when you die, your soul goes up
 onto the roof and gets stuck.''',
 "@quotation",
 '''Never precede any action with the words "Watch this!"
--- the first constant Law of Frisbee''',
+-- the second constant Law of Frisbee''',
                           "@end quotation"], self.visitor.body)
 
     def test_literal_block(self):
@@ -203,5 +215,4 @@ THE LANDING::
 """"Just the place for a Snark!" the Bellman cried,
      As he landed his crew with care;
 Supporting each man on the top of the tide
-     By a finger entwined in his hair."""
-                          ], self.visitor.body)
+     By a finger entwined in his hair."""], self.visitor.body)
