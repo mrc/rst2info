@@ -45,6 +45,7 @@ bank, and of having nothing to do: once or twice she had peeped into the
 book her sister was reading, but it had no pictures or conversations in
 it, 'and what is the use of a book,' thought Alice 'without pictures or
 conversation?'
+
 """)
 
     def test_translate_frisbeetarianism(self):
@@ -80,7 +81,9 @@ Keep in mind always the four constant Laws of Frisbee:
 @top Frisbeetarianism
 Frisbeetarianism is the belief that, when you die, your soul goes up
 onto the roof and gets stuck.
+
 Keep in mind always the four constant Laws of Frisbee:
+
 @quotation
 @enumerate
 @item

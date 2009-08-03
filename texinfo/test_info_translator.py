@@ -121,7 +121,7 @@ Section 2
 Someone left the cake out in the rain.
 I don't think that I can take it.
             """)
-        self.assertEqual(["Someone left the cake out in the rain.\nI don't think that I can take it."], self.visitor.body)
+        self.assertEqual(["Someone left the cake out in the rain.\nI don't think that I can take it.", ''], self.visitor.body)
 
     def test_two_paragraphs(self):
         self.given_input("""
@@ -130,8 +130,8 @@ MacArthur's park is melting in the dark.
 Someone left the cake out in the rain.
 I don't think that I can take it.
 """)
-        self.assertEqual(["MacArthur's park is melting in the dark.",
-                          "Someone left the cake out in the rain.\nI don't think that I can take it."], self.visitor.body)
+        self.assertEqual(["MacArthur's park is melting in the dark.", '',
+                          "Someone left the cake out in the rain.\nI don't think that I can take it.", ''], self.visitor.body)
 
 
     def test_single_bullet_list(self):
@@ -174,6 +174,21 @@ I don't think that I can take it.
                           "@item", "Worse pay, better fellow workers.", "",
                           "@end enumerate"], self.visitor.body)
 
+    def test_single_enumerated_sub_list(self):
+        self.given_input("""
+a. lower-case letters
+
+   1. with a sub-list starting at a different number
+   2. make sure the numbers are in the correct sequence though!
+""")
+        self.assertEqual(["@enumerate",
+                          "@item", "lower-case letters", "",
+                          "@enumerate",
+                          "@item", "with a sub-list starting at a different number", "",
+                          "@item", "make sure the numbers are in the correct sequence though!", "",
+                          "@end enumerate",
+                          "@end enumerate"], self.visitor.body)
+
     def test_quotation(self):
         self.given_input("""
   Never precede any action with the words "Watch this!"
@@ -182,7 +197,7 @@ I don't think that I can take it.
 """)
         self.assertEqual(["@quotation",
 '''Never precede any action with the words "Watch this!"
--- the second constant Law of Frisbee''',
+-- the second constant Law of Frisbee''', '',
                           "@end quotation"], self.visitor.body)
 
     def test_formatted_code(self):
@@ -195,10 +210,10 @@ onto the roof and gets stuck.
 """)
         self.assertEqual([
 '''Frisbeetarianism is the belief that, when you die, your soul goes up
-onto the roof and gets stuck.''',
+onto the roof and gets stuck.''', '',
 "@quotation",
 '''Never precede any action with the words "Watch this!"
--- the second constant Law of Frisbee''',
+-- the second constant Law of Frisbee''', '',
                           "@end quotation"], self.visitor.body)
 
     def test_literal_block(self):
@@ -211,7 +226,7 @@ THE LANDING::
           By a finger entwined in his hair.
 
 """)
-        self.assertEqual(["THE LANDING:",
+        self.assertEqual(["THE LANDING:", '',
 """"Just the place for a Snark!" the Bellman cried,
      As he landed his crew with care;
 Supporting each man on the top of the tide

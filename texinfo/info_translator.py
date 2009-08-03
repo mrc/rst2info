@@ -64,6 +64,7 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def visit_paragraph(self, node):
         self.body.append(node.astext())
+        self.body.append('')
         raise nodes.SkipNode
 
     def visit_bullet_list(self, node):
@@ -82,7 +83,7 @@ class InfoTranslator(nodes.NodeVisitor):
         self.body.append('@item')
 
     def depart_list_item(self, node):
-        self.body.append('')
+        pass
 
     def visit_literal(self, node):
         raise nodes.SkipNode
