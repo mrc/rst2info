@@ -1,11 +1,12 @@
+
 import rst_test_utils
 from info_translator import InfoTranslator
 from docutils.transforms import frontmatter
 
 class T(rst_test_utils.TestCase):
 
-    def given_input(self, input, transforms = []):
-        super(T, self).given_input(input)
+    def given_input(self, input, transforms=[], debug=False):
+        super(T, self).given_input(input, debug)
         self.visitor = InfoTranslator(self.document)
 
         for t in transforms:

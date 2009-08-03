@@ -97,3 +97,24 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def depart_block_quote(self, node):
         self.body.append('@end quotation')
+
+    def visit_system_message(self, node):
+        # from rst2man
+        # TODO add report_level
+        #if node['level'] < self.document.reporter['writer'].report_level:
+            # Level is too low to display:
+        #    raise nodes.SkipNode
+        self.body.append('@c system-message')
+        attr = {}
+        backref_text = ''
+        if node.hasattr('id'):
+            attr['name'] = node['id']
+        if node.hasattr('line'):
+            line = ', line %s' % node['line']
+        else:
+            line = ''
+        self.body.append('@c System Message: %s/%s (%s:%s)'
+                         % (node['type'], node['level'], node['source'], line))
+
+    def depart_system_message(self, node):
+        self.body.append('')
