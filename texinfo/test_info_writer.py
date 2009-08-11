@@ -85,7 +85,7 @@ onto the roof and gets stuck.
 Keep in mind always the four constant Laws of Frisbee:
 
 @quotation
-@enumerate
+@enumerate 1
 @item
 The most powerful force in the world is that of a disc
 straining to land under a car, just out of reach (this

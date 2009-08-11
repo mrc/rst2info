@@ -167,7 +167,7 @@ I don't think that I can take it.
         self.given_input("""
 (1) I was transferred to the moon.
 """)
-        self.assertEqual(["@enumerate",
+        self.assertEqual(["@enumerate 1",
                           "@item", "I was transferred to the moon.", "",
                           "@end enumerate"], self.visitor.body)
 
@@ -177,7 +177,7 @@ I don't think that I can take it.
 (2) Worse pay, better hours.
 (3) Worse pay, better fellow workers.
 """)
-        self.assertEqual(["@enumerate",
+        self.assertEqual(["@enumerate 1",
                           "@item", "I was transferred to the moon.", "",
                           "@item", "Worse pay, better hours.", "",
                           "@item", "Worse pay, better fellow workers.", "",
@@ -187,16 +187,91 @@ I don't think that I can take it.
         self.given_input("""
 a. lower-case letters
 
-   1. with a sub-list starting at a different number
-   2. make sure the numbers are in the correct sequence though!
+   1. with a sub-list
+   2. with two items
 """)
-        self.assertEqual(["@enumerate",
+        self.assertEqual(["@enumerate a",
                           "@item", "lower-case letters", "",
-                          "@enumerate",
+                          "@enumerate 1",
+                          "@item", "with a sub-list", "",
+                          "@item", "with two items", "",
+                          "@end enumerate",
+                          "@end enumerate"], self.visitor.body)
+
+    def test_sub_lists_from_rst_quickstart(self):
+        self.given_input("""
+1. numbers
+
+A. upper-case letters
+   and it goes over many lines
+
+   with two paragraphs and all!
+
+a. lower-case letters
+
+   3. with a sub-list starting at a different number
+   4. make sure the numbers are in the correct sequence though!
+
+I. upper-case roman numerals
+
+i. lower-case roman numerals
+
+(1) numbers again
+
+1) and again
+""")
+        self.assertEqual(["@enumerate 1",
+                          "@item", "numbers", "",
+                          "@end enumerate",
+
+                          "@enumerate A",
+                          "@item", "upper-case letters\nand it goes over many lines", "",
+                          "with two paragraphs and all!", "",
+                          "@end enumerate",
+
+                          "@enumerate a",
+                          "@item", "lower-case letters", "",
+                          "@enumerate 3",
                           "@item", "with a sub-list starting at a different number", "",
                           "@item", "make sure the numbers are in the correct sequence though!", "",
                           "@end enumerate",
-                          "@end enumerate"], self.visitor.body)
+                          "@end enumerate",
+
+                          "@enumerate 1",
+                          "@item", "upper-case roman numerals", "",
+                          "@end enumerate",
+
+                          "@enumerate 1",
+                          "@item", "lower-case roman numerals", "",
+                          "@end enumerate",
+
+                          "@enumerate 1",
+                          "@item", "numbers again", "",
+                          "@end enumerate",
+
+                          "@enumerate 1",
+                          "@item", "and again", "",
+                          "@end enumerate"], strip_comments(self.visitor.body))
+
+    def test_system_message(self):
+        self.given_input("""
+3. Lists generally don't start at 3
+""", settings_overrides={'report_level':1})
+        self.assertEqual(["@enumerate 3",
+                          "@item", "Lists generally don't start at 3", "",
+                          "@end enumerate",
+                          "@c System Message: INFO/1 (rst_test_utils:, line 2)",
+                          "@c Enumerated list start value not ordinal-1: \"3\" (ordinal 3)",
+                          "@c --end system message--"], self.visitor.body)
+
+    def test_system_message_below_report_level(self):
+        self.given_input("""
+3. Lists generally don't start at 3
+""")
+        self.assertEqual(["@enumerate 3",
+                          "@item", "Lists generally don't start at 3", "",
+                          "@end enumerate"
+                          ], self.visitor.body)
 
     def test_quotation(self):
         self.given_input("""

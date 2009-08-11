@@ -1,5 +1,6 @@
 from docutils import nodes
 import exceptions
+import string
 
 class InfoTranslator(nodes.NodeVisitor):
 
@@ -78,7 +79,15 @@ class InfoTranslator(nodes.NodeVisitor):
         self.body.append('@end @itemize')
 
     def visit_enumerated_list(self, node):
-        self.body.append('@enumerate')
+        start = 1
+        if node.has_key('start'):
+            start = node['start']
+        if node.has_key('enumtype'):
+            if node['enumtype'] == 'upperalpha':
+                start =string.ascii_uppercase[start-1]
+            if node['enumtype'] == 'loweralpha':
+                start =string.ascii_lowercase[start-1]
+        self.body.append('@enumerate %s' % start)
 
     def depart_enumerated_list(self, node):
         self.body.append('@end enumerate')
@@ -104,9 +113,7 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def visit_system_message(self, node):
         # from rst2man
-        print "node['level']=%s, self.settings.report_level=%s" % (node['level'], self.settings.report_level)
-        if node['level'] < self.settings.report_level: #self.document.reporter['writer'].report_level:
-            # Level is too low to display:
+        if node['level'] < self.settings.report_level:
             raise nodes.SkipNode
         attr = {}
         backref_text = ''
