@@ -3,10 +3,13 @@ import rst_test_utils
 from info_translator import InfoTranslator
 from docutils.transforms import frontmatter
 
+def strip_comments(body):
+    return filter(lambda x: not x.startswith('@c '), body)
+
 class T(rst_test_utils.TestCase):
 
-    def given_input(self, input, transforms=[], debug=False):
-        super(T, self).given_input(input, debug)
+    def given_input(self, input, transforms=[], settings_overrides={}):
+        super(T, self).given_input(input, settings_overrides)
         self.visitor = InfoTranslator(self.document)
 
         for t in transforms:
@@ -14,6 +17,11 @@ class T(rst_test_utils.TestCase):
         self.document.transformer.apply_transforms()
 
         self.document.walkabout(self.visitor)
+
+    def test_strip_comments(self):
+        self.visitor.body = ['Hello', '@c blah', 'World!']
+        self.assertEqual(['Hello', '@c blah', 'World!'], self.visitor.body)
+        self.assertEqual(['Hello', 'World!'], strip_comments(self.visitor.body))
 
     def setUp(self):
         self.given_input('')

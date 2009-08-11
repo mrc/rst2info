@@ -12,6 +12,7 @@ class InfoTranslator(nodes.NodeVisitor):
         self.header = []
         self.body = []
         self.section_level = 0
+        self.system_message_level = 0
         self.docinfo = {}
 
     def astext(self):
@@ -63,8 +64,11 @@ class InfoTranslator(nodes.NodeVisitor):
         raise nodes.SkipNode
 
     def visit_paragraph(self, node):
-        self.body.append(node.astext())
-        self.body.append('')
+        if self.system_message_level > 0:
+            self.body.append('@c %s' % node.astext())
+        else:
+            self.body.append(node.astext())
+            self.body.append('')
         raise nodes.SkipNode
 
     def visit_bullet_list(self, node):
@@ -100,11 +104,10 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def visit_system_message(self, node):
         # from rst2man
-        # TODO add report_level
-        #if node['level'] < self.document.reporter['writer'].report_level:
+        print "node['level']=%s, self.settings.report_level=%s" % (node['level'], self.settings.report_level)
+        if node['level'] < self.settings.report_level: #self.document.reporter['writer'].report_level:
             # Level is too low to display:
-        #    raise nodes.SkipNode
-        self.body.append('@c system-message')
+            raise nodes.SkipNode
         attr = {}
         backref_text = ''
         if node.hasattr('id'):
@@ -115,6 +118,8 @@ class InfoTranslator(nodes.NodeVisitor):
             line = ''
         self.body.append('@c System Message: %s/%s (%s:%s)'
                          % (node['type'], node['level'], node['source'], line))
+        self.system_message_level += 1
 
     def depart_system_message(self, node):
-        self.body.append('')
+        self.system_message_level -= 1
+        self.body.append('@c --end system message--')
