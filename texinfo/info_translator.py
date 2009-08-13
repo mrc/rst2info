@@ -65,18 +65,18 @@ class InfoTranslator(nodes.NodeVisitor):
         raise nodes.SkipNode
 
     def visit_paragraph(self, node):
-        if self.system_message_level > 0:
-            self.body.append('@c %s' % node.astext())
-        else:
-            self.body.append(node.astext())
+        pass
+
+    def depart_paragraph(self, node):
+        if self.system_message_level == 0:
             self.body.append('')
-        raise nodes.SkipNode
 
     def visit_bullet_list(self, node):
         self.body.append('@itemize @bullet')
 
     def depart_bullet_list(self, node):
         self.body.append('@end @itemize')
+        self.body.append('')
 
     def visit_enumerated_list(self, node):
         start = 1
@@ -91,6 +91,7 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def depart_enumerated_list(self, node):
         self.body.append('@end enumerate')
+        self.body.append('')
 
     def visit_list_item(self, node):
         self.body.append('@item')
@@ -110,6 +111,7 @@ class InfoTranslator(nodes.NodeVisitor):
 
     def depart_block_quote(self, node):
         self.body.append('@end quotation')
+        self.body.append('')
 
     def visit_system_message(self, node):
         # from rst2man
@@ -130,3 +132,37 @@ class InfoTranslator(nodes.NodeVisitor):
     def depart_system_message(self, node):
         self.system_message_level -= 1
         self.body.append('@c --end system message--')
+
+    def visit_definition_list(self, node):
+        pass
+
+    def depart_definition_list(self, node):
+        pass
+
+    def visit_definition_list_item(self, node):
+        pass
+
+    def depart_definition_list_item(self, node):
+        pass
+
+    def visit_term(self, node):
+        pass
+
+    def depart_term(self, node):
+        pass
+
+    def visit_definition(self, node):
+        self.body.append('@quotation')
+
+    def depart_definition(self, node):
+        self.body.append('@end quotation')
+        self.body.append('')
+
+    def visit_Text(self, node):
+        if self.system_message_level > 0:
+            self.body.append('@c %s' % node.astext())
+        else:
+            self.body.append(node.astext())
+
+    def depart_Text(self, node):
+        pass

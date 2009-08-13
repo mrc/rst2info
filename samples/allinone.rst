@@ -2,8 +2,10 @@
 Frisbeetarianism
 ================
 
-Frisbeetarianism is the belief that, when you die, your soul goes up
-onto the roof and gets stuck.
+Frisbeetarianism
+  The belief that, when you die, your soul goes up
+  onto the roof and gets stuck.
+
 
 Keep in mind always the four constant Laws of Frisbee:
 

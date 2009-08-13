@@ -149,7 +149,7 @@ I don't think that I can take it.
 """)
         self.assertEqual(["@itemize @bullet",
                           "@item", "milk", "",
-                          "@end @itemize"], self.visitor.body)
+                          "@end @itemize", ""], self.visitor.body)
 
     def test_three_bullet_list(self):
         self.given_input("""
@@ -161,7 +161,7 @@ I don't think that I can take it.
                           "@item", "milk", "",
                           "@item", "eggs", "",
                           "@item", "bread", "",
-                          "@end @itemize"], self.visitor.body)
+                          "@end @itemize", ""], self.visitor.body)
 
     def test_single_enumerated_list(self):
         self.given_input("""
@@ -169,7 +169,7 @@ I don't think that I can take it.
 """)
         self.assertEqual(["@enumerate 1",
                           "@item", "I was transferred to the moon.", "",
-                          "@end enumerate"], self.visitor.body)
+                          "@end enumerate", ""], self.visitor.body)
 
     def test_three_item_enumerated_list(self):
         self.given_input("""
@@ -181,7 +181,7 @@ I don't think that I can take it.
                           "@item", "I was transferred to the moon.", "",
                           "@item", "Worse pay, better hours.", "",
                           "@item", "Worse pay, better fellow workers.", "",
-                          "@end enumerate"], self.visitor.body)
+                          "@end enumerate", ""], self.visitor.body)
 
     def test_single_enumerated_sub_list(self):
         self.given_input("""
@@ -195,8 +195,8 @@ a. lower-case letters
                           "@enumerate 1",
                           "@item", "with a sub-list", "",
                           "@item", "with two items", "",
-                          "@end enumerate",
-                          "@end enumerate"], self.visitor.body)
+                          "@end enumerate", "",
+                          "@end enumerate", ""], self.visitor.body)
 
     def test_sub_lists_from_rst_quickstart(self):
         self.given_input("""
@@ -222,36 +222,36 @@ i. lower-case roman numerals
 """)
         self.assertEqual(["@enumerate 1",
                           "@item", "numbers", "",
-                          "@end enumerate",
+                          "@end enumerate", "",
 
                           "@enumerate A",
                           "@item", "upper-case letters\nand it goes over many lines", "",
                           "with two paragraphs and all!", "",
-                          "@end enumerate",
+                          "@end enumerate", "",
 
                           "@enumerate a",
                           "@item", "lower-case letters", "",
                           "@enumerate 3",
                           "@item", "with a sub-list starting at a different number", "",
                           "@item", "make sure the numbers are in the correct sequence though!", "",
-                          "@end enumerate",
-                          "@end enumerate",
+                          "@end enumerate", "",
+                          "@end enumerate", "",
 
                           "@enumerate 1",
                           "@item", "upper-case roman numerals", "",
-                          "@end enumerate",
+                          "@end enumerate", "",
 
                           "@enumerate 1",
                           "@item", "lower-case roman numerals", "",
-                          "@end enumerate",
+                          "@end enumerate", "",
 
                           "@enumerate 1",
                           "@item", "numbers again", "",
-                          "@end enumerate",
+                          "@end enumerate", "",
 
                           "@enumerate 1",
                           "@item", "and again", "",
-                          "@end enumerate"], strip_comments(self.visitor.body))
+                          "@end enumerate", ""], strip_comments(self.visitor.body))
 
     def test_system_message(self):
         self.given_input("""
@@ -259,7 +259,7 @@ i. lower-case roman numerals
 """, settings_overrides={'report_level':1})
         self.assertEqual(["@enumerate 3",
                           "@item", "Lists generally don't start at 3", "",
-                          "@end enumerate",
+                          "@end enumerate", "",
                           "@c System Message: INFO/1 (rst_test_utils:, line 2)",
                           "@c Enumerated list start value not ordinal-1: \"3\" (ordinal 3)",
                           "@c --end system message--"], self.visitor.body)
@@ -270,7 +270,7 @@ i. lower-case roman numerals
 """)
         self.assertEqual(["@enumerate 3",
                           "@item", "Lists generally don't start at 3", "",
-                          "@end enumerate"
+                          "@end enumerate", ""
                           ], self.visitor.body)
 
     def test_quotation(self):
@@ -282,7 +282,7 @@ i. lower-case roman numerals
         self.assertEqual(["@quotation",
 '''Never precede any action with the words "Watch this!"
 -- the second constant Law of Frisbee''', '',
-                          "@end quotation"], self.visitor.body)
+                          "@end quotation", ""], self.visitor.body)
 
     def test_formatted_code(self):
         self.given_input("""
@@ -298,7 +298,7 @@ onto the roof and gets stuck.''', '',
 "@quotation",
 '''Never precede any action with the words "Watch this!"
 -- the second constant Law of Frisbee''', '',
-                          "@end quotation"], self.visitor.body)
+                          "@end quotation", ""], self.visitor.body)
 
     def test_literal_block(self):
         self.given_input("""
@@ -315,3 +315,26 @@ THE LANDING::
      As he landed his crew with care;
 Supporting each man on the top of the tide
      By a finger entwined in his hair."""], self.visitor.body)
+
+    def test_definition_list(self):
+        self.given_input("""
+what
+  Definition lists associate a term with a definition.
+
+how
+  The term is a one-line phrase, and the definition is one or more
+  paragraphs or body elements, indented relative to the term.
+  Blank lines are not allowed between term and definition.
+""")
+        self.assertEqual(["what",
+                          "@quotation",
+                          "Definition lists associate a term with a definition.",
+                          "",
+                          "@end quotation", "",
+                          "how",
+                          "@quotation",
+                          "The term is a one-line phrase, and the definition is one or more\n"
+                          "paragraphs or body elements, indented relative to the term.\n"
+                          "Blank lines are not allowed between term and definition.",
+                          "",
+                          "@end quotation", ""], self.visitor.body)
